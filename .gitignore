@@ -1,4 +1,5 @@
-.env.*
+# Environment Files
+# .env.*
 
 # compiled output
 /dist
