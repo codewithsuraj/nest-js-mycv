@@ -21,30 +21,26 @@ const cookieSession = require('cookie-session');
         return {
           type: 'sqlite',
           database: config.get<string>('DB_NAME'),
-          synchronize: true,
+          synchronize: true, // NEVER SET TRUE FOR PRODUCTION
           entities: [User, Report],
         };
       },
     }),
     ReportsModule,
     UsersModule,
-    // TypeOrmModule.forRoot({
-    //   type: 'sqlite',
-    //   database: 'db.sqlite',
-    //   entities: [User, Report],
-    //   synchronize: true,
-    // }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
 
+  constructor(private configService: ConfigService) { }
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         cookieSession({
-          keys: ['adfadfadf']
+          keys: [this.configService.get('COOKIE_KEY')]
         })
       )
       .forRoutes('*');
